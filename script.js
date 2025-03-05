@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const startDate = new Date("2025-02-19");
         const currentDate = new Date();
         const timeDifference = currentDate - startDate;
-        return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        console.log(timeDifference)
+        return timeDifference / (1000 * 60 * 60 * 24);
     }
     
     // Calculate days remaining until Mar 31, 2025
@@ -22,27 +23,26 @@ document.addEventListener("DOMContentLoaded", function() {
         const endDate = new Date("2025-03-31");
         const currentDate = new Date();
         const timeDifference = endDate - currentDate;
-        return Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        return timeDifference / (1000 * 60 * 60 * 24);
     }
     
-    let daysElapsed = calculateDaysElapsed();
-    let daysRemaining = calculateDaysRemaining();
+    function updateCounters() {
+        let daysElapsed = calculateDaysElapsed();
+        let daysRemaining = calculateDaysRemaining();
+        let percentUsed = (daysElapsed / (daysElapsed + daysRemaining)) * 100;
+        
+        elapsedParagraph.textContent = `Days elapsed since Feb 19, 2025: ${daysElapsed.toFixed(2)}`;
+        remainingParagraph.textContent = `Days remaining until Mar 31, 2025: ${daysRemaining.toFixed(2)}`;
+        headerTitle.textContent = percentUsed.toFixed(4) + "%";
+    }
     
-    elapsedParagraph.textContent = `Days elapsed since Feb 19, 2025: ${daysElapsed}`;
-    //remainingParagraph.textContent = `Days remaining until Mar 31, 2025: ${daysRemaining}`;
+    // Initial update
+    updateCounters();
     
     // Insert paragraphs after the h1 element
     headerTitle.insertAdjacentElement("afterend", elapsedParagraph);
     elapsedParagraph.insertAdjacentElement("afterend", remainingParagraph);
     
-    // Update the counters every day
-    setInterval(() => {
-        daysElapsed = calculateDaysElapsed();
-        daysRemaining = calculateDaysRemaining();
-        elapsedParagraph.textContent = `Days elapsed since Feb 19, 2025: ${daysElapsed}`;
-        // remainingParagraph.textContent = `Days remaining until Mar 31, 2025: ${daysRemaining}`;
-    }, 1000 * 60 * 60 * 24);
-
-    percentUsed = daysElapsed / (daysElapsed+daysRemaining) * 100
-    headerTitle.textContent = percentUsed +"%";
+    // Update the counters every minute
+    setInterval(updateCounters, 1000);
 });
